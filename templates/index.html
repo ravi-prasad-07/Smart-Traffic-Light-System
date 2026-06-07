@@ -1,1 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Traffic Light Control System</title>
+  <meta name="description" content="AI-powered traffic light control using YOLOv8s — emergency vehicle detection, density tracking, pedestrian crossing, and government priority override.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <p class="eyebrow">AI Traffic Control — YOLOv8s</p>
+      <h1>Smart Traffic Light Control System</h1>
+      <p class="hero-copy">
+        Upload 3 or 4 traffic videos. The system uses YOLOv8s detection with ByteTrack tracking,
+        emergency vehicle recognition (ambulance &amp; fire truck), pedestrian detection, and
+        supports government priority override for authorized operations.
+      </p>
+    </header>
 
+    <main class="layout">
+
+      <!-- ============ GOVERNMENT OVERRIDE PANEL ============ -->
+      <section class="panel override-panel" id="override-panel">
+        <div class="panel-head">
+          <div>
+            <p class="label">🏛️ Authority Control</p>
+            <h2>Government Priority Override</h2>
+          </div>
+          <span id="override-badge" class="override-badge inactive">Inactive</span>
+        </div>
+
+        <p class="decision-text">
+          Authorized personnel can force any lane to GREEN, overriding all automatic priorities.
+          The system returns to automatic mode when the override is cleared.
+        </p>
+
+        <div class="override-controls">
+          <div class="override-row">
+            <label for="override-lane-select" class="override-label">Select Lane:</label>
+            <select id="override-lane-select" class="override-select">
+              {% for lane_name in lane_names %}
+                <option value="{{ loop.index }}">{{ lane_name }} (Lane {{ loop.index }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="override-row">
+            <label for="override-reason" class="override-label">Reason:</label>
+            <input id="override-reason" type="text" class="override-input" placeholder="e.g., VIP convoy, military operation" value="">
+          </div>
+          <div class="override-actions">
+            <button type="button" id="activate-override" class="override-activate-btn">
+              🔓 Activate Override
+            </button>
+            <button type="button" id="clear-override" class="override-clear-btn" disabled>
+              🔒 Clear Override
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ UPLOAD PANEL ============ -->
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="label">Step 1</p>
+            <h2>Upload Lane Videos</h2>
+          </div>
+          <div class="lane-switch">
+            <button type="button" class="lane-button" data-count="3">3 Lanes</button>
+            <button type="button" class="lane-button active" data-count="4">4 Lanes</button>
+          </div>
+        </div>
+
+        <form id="traffic-form">
+          <input type="hidden" id="lane-count" name="lane_count" value="4">
+
+          <div class="upload-grid" id="upload-grid" data-count="4">
+            {% for lane_name in lane_names %}
+              <label class="upload-card" data-index="{{ loop.index }}">
+                <input class="video-input" type="file" name="lane_{{ loop.index }}" accept="video/*">
+                <div class="upload-preview">
+                  <video class="preview-video" muted playsinline preload="metadata"></video>
+                  <div class="preview-copy">
+                    <span class="lane-number">0{{ loop.index }}</span>
+                    <strong>{{ lane_name }}</strong>
+                    <span class="file-name">Choose a traffic video</span>
+                  </div>
+                </div>
+              </label>
+            {% endfor %}
+          </div>
+
+          <div class="form-row">
+            <p id="status-text" class="status-text">
+              Upload traffic videos (MP4 recommended). YOLOv8s handles vehicle + pedestrian detection.
+            </p>
+            <div class="control-buttons">
+              <button type="submit" id="start-button" class="start-button">
+                ▶ START
+              </button>
+              <button type="button" id="stop-button" class="stop-button" disabled>
+                <span class="stop-icon">■</span> STOP
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- ============ DECISION PANEL ============ -->
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="label">Step 2</p>
+            <h2>Traffic Decision</h2>
+          </div>
+          <div class="top-metrics">
+            <div class="metric">
+              <span>Priority Lane</span>
+              <strong id="priority-lane">--</strong>
+            </div>
+            <div class="metric">
+              <span>Total Cycle</span>
+              <strong id="cycle-total">--</strong>
+            </div>
+            <div class="metric">
+              <span>Pedestrians</span>
+              <strong id="total-pedestrians">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <p id="decision-text" class="decision-text">
+          Results will appear here after analysis.
+        </p>
+
+        <div id="lane-results" class="lane-results empty">
+          <article class="empty-card">
+            <h3>No lane analysis yet</h3>
+            <p>Each lane will show a snapshot, estimated count, density level, and allocated timing.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ SIMULATION PANEL ============ -->
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="label">Step 3</p>
+            <h2>Signal Simulation</h2>
+          </div>
+          <div class="sim-controls">
+            <span id="sim-status-badge" class="sim-badge idle">Idle</span>
+            <button type="button" id="sim-replay-btn" class="stop-button" style="display:none; margin-left: 10px;">🔁 REPLAY</button>
+            <button type="button" id="sim-stop-btn" class="stop-button" style="display:none; margin-left: 10px;">⏸️ STOP</button>
+          </div>
+        </div>
+
+        <p id="simulation-text" class="decision-text">
+          The simulation runs continuously like a real-time traffic system. Press STOP to halt.
+        </p>
+
+        <div id="simulation-grid" class="simulation-grid" data-count="4">
+          <article class="empty-card">
+            <h3>Simulation waiting</h3>
+            <p>Run the analysis to turn your uploaded traffic videos into a timed signal cycle.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ HISTORY PANEL ============ -->
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="label">History</p>
+            <h2>Recent Cycles</h2>
+          </div>
+        </div>
+        <div id="history-list" class="history-list"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    window.bootstrapData = {{ dict(laneNames=lane_names, recentCycles=recent_cycles) | tojson | safe }};
+  </script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
