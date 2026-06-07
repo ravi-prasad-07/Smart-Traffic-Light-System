@@ -1,55 +1,115 @@
-# Smart Traffic Light System 🚦
+````md
+# 🚦 Smart Traffic Light System
 
-A web-based intelligent traffic management system built using YOLO for real-time vehicle, pedestrian, and emergency vehicle detection. The system dynamically adjusts traffic signal timings according to traffic density to reduce congestion and improve road safety.
+An AI-powered web-based traffic management system using YOLO for real-time vehicle, pedestrian, and emergency vehicle detection. The system dynamically controls traffic signals based on traffic density to reduce congestion and improve road safety.
 
 ---
 
 ## ✨ Features
 
-* 🚗 Real-time vehicle detection and counting
-* 🚦 Dynamic traffic signal control based on traffic density
-* 🚑 Emergency vehicle detection (Ambulance, Fire Brigade, etc.)
-* 🏛 Government priority lane management system
-* 🚶 Pedestrian detection with safe crossing signals
-* 🌐 Web-based traffic monitoring dashboard
-* 📹 Video feed processing using AI-based object detection
-* 🗄 Traffic data storage using SQLite
-* 🖼 Processed image data saved in separate folders for analysis and records
+- 🚗 Real-time vehicle detection and counting
+- 🚦 Dynamic traffic signal timing based on traffic density
+- 🚑 Emergency vehicle priority system
+- 🏛 Government priority lane clearance feature
+- 🚶 Pedestrian crossing signal management
+- 🌐 Web-based monitoring dashboard
+- 🗄 SQLite database integration for traffic data storage
+- 🖼 Processed image storage in separate folders
+- ⚡ Automatically uses GPU if available, otherwise CPU
 
 ---
 
 ## 🛠 Tech Stack
 
-* Python
-* YOLO (Object Detection)
-* OpenCV
-* SQLite
-* Flask / Django
-* HTML, CSS, JavaScript
+- Python
+- YOLOv8
+- OpenCV
+- Flask
+- SQLite
+- HTML, CSS, JavaScript
+
+---
+
+## 📂 Project Structure
+
+```bash
+Smart-Traffic-Light-System/
+│
+├── static/
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   └── app.js
+│   ├── snapshots/
+│   └── uploads/
+│
+├── templates/
+│   └── index.html
+│
+├── __pycache__/
+│
+├── .yolo/
+│
+├── app.py
+├── emergency_detector_v2.py
+├── model_optimizer.py
+├── runtime_config.py
+├── storage.py
+├── traffic_core_optimized.py
+├── vehicle_tracker.py
+├── traffic.db
+├── yolov8m.pt
+├── requirements.txt
+└── README.md
+````
 
 ---
 
 ## ⚙️ How It Works
 
-1. The system processes live or recorded traffic video feeds.
-2. YOLO detects vehicles, pedestrians, and emergency vehicles.
-3. Traffic density is analyzed in real time.
-4. Signal timings are adjusted dynamically.
-5. Emergency vehicles receive instant signal priority.
-6. Pedestrian crossings are managed automatically for safety.
-7. Traffic data is stored in an SQLite database.
-8. Processed images and detection outputs are saved in separate folders for future analysis.
+1. Video feeds are uploaded or streamed into the system.
+2. YOLOv8 detects vehicles, pedestrians, and emergency vehicles.
+3. Traffic density is calculated in real time.
+4. Traffic signals are dynamically adjusted.
+5. Emergency vehicles receive instant green signal priority.
+6. Pedestrian crossing signals are managed automatically.
+7. Traffic data is stored in SQLite database.
+8. Processed images are saved for monitoring and analysis.
+9. GPU acceleration is used when available for faster performance.
+
+---
+
+## 🚀 Installation
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/your-username/Smart-Traffic-Light-System.git
+cd Smart-Traffic-Light-System
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Run the Application
+
+```bash
+python app.py
+```
 
 ---
 
 ## 🎯 Objective
 
-The goal of this project is to develop a smart and efficient traffic management system that:
+The objective of this project is to build a smart and efficient AI-based traffic management system that:
 
 * Reduces traffic congestion
 * Improves emergency response time
 * Enhances pedestrian safety
-* Uses AI for intelligent traffic monitoring
+* Supports intelligent city infrastructure
 
 ---
 
@@ -65,13 +125,17 @@ The goal of this project is to develop a smart and efficient traffic management 
 
 ## 📌 Future Improvements
 
-* Integration with IoT-based smart city infrastructure
-* Live CCTV feed support
-* Cloud-based traffic analytics dashboard
-* Mobile application for traffic monitoring
+* Live CCTV integration
+* IoT-based smart traffic system
+* Cloud traffic analytics dashboard
+* Mobile application support
+* Automatic accident detection
 
 ---
 
 ## 📄 License
 
-This project is created for educational and research purposes.
+This project is developed for educational and research purposes.
+
+```
+```
