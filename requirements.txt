@@ -1,0 +1,7 @@
+Flask>=3.0
+opencv-python>=4.10
+numpy>=1.26
+ultralytics>=8.4
+scipy>=1.12
+lap>=0.4
+nvidia-ml-py>=12.560
