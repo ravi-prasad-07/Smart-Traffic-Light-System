@@ -1,1 +1,678 @@
+/* ===================================================================
+   Smart Traffic Light Control System — Styles
+   YOLOv8s | Government Override | Emergency | Pedestrian
+   =================================================================== */
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #061019;
+  --panel: #0d1925;
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #eef6ff;
+  --muted: #94a8ba;
+  --accent: #ffb84d;
+  --green: #5ae08e;
+  --yellow: #ffd84d;
+  --red: #ff687d;
+  --blue: #5da5ff;
+  --purple: #b47aff;
+  --shadow: 0 22px 50px rgba(0, 0, 0, 0.28);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: "Space Grotesk", sans-serif;
+  background:
+    radial-gradient(circle at top right, rgba(93, 213, 255, 0.14), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(255, 184, 77, 0.18), transparent 32%),
+    linear-gradient(180deg, #07111b 0%, #091522 50%, #050b12 100%);
+}
+
+.page {
+  width: min(1240px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.hero { margin-bottom: 1.5rem; }
+
+.eyebrow, .label {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.74rem;
+  color: var(--accent);
+}
+
+.hero h1 {
+  margin: 0.6rem 0 0;
+  font-family: "Syne", sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4.9rem);
+  line-height: 0.96;
+}
+
+.hero-copy, .status-text, .decision-text,
+.empty-card p, .meta span, .history-card p {
+  color: var(--muted);
+}
+
+.hero-copy {
+  max-width: 820px;
+  margin-top: 1rem;
+  line-height: 1.75;
+}
+
+.layout { display: grid; gap: 1.2rem; }
+
+.panel {
+  background: linear-gradient(180deg, rgba(18, 34, 51, 0.92), rgba(10, 20, 30, 0.95));
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  padding: 1.3rem;
+  box-shadow: var(--shadow);
+}
+
+.panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.panel h2 { margin: 0.18rem 0 0; font-size: 1.5rem; }
+
+.lane-switch {
+  display: inline-flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.35rem;
+  border-radius: 999px;
+}
+
+.lane-button, .start-button, .stop-button,
+.override-activate-btn, .override-clear-btn {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.lane-button {
+  background: transparent;
+  color: var(--muted);
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+}
+
+.lane-button.active {
+  background: rgba(255, 184, 77, 0.16);
+  color: var(--text);
+}
+
+
+/* ===================================================================
+   Government Override Panel
+   =================================================================== */
+
+.override-panel {
+  border-color: rgba(180, 122, 255, 0.25);
+  background: linear-gradient(180deg, rgba(28, 18, 51, 0.92), rgba(10, 10, 30, 0.95));
+}
+
+.override-panel .label { color: var(--purple); }
+
+.override-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.override-badge.inactive {
+  background: rgba(148, 168, 186, 0.12);
+  color: var(--muted);
+}
+
+.override-badge.active {
+  background: rgba(180, 122, 255, 0.2);
+  color: var(--purple);
+  animation: override-pulse 1.5s ease-in-out infinite;
+}
+
+.override-badge.active::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--purple);
+  animation: badge-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes override-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(180, 122, 255, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(180, 122, 255, 0.5); }
+}
+
+.override-controls {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.override-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.override-label {
+  min-width: 100px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.override-select, .override-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.override-select:focus, .override-input:focus {
+  outline: none;
+  border-color: rgba(180, 122, 255, 0.5);
+}
+
+.override-select option {
+  background: #0d1925;
+  color: var(--text);
+}
+
+.override-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.3rem;
+}
+
+.override-activate-btn {
+  padding: 0.8rem 1.4rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #b47aff, #8b5cf6);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.92rem;
+  box-shadow: 0 4px 18px rgba(180, 122, 255, 0.3);
+}
+
+.override-activate-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(180, 122, 255, 0.5);
+}
+
+.override-clear-btn {
+  padding: 0.8rem 1.4rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.92rem;
+  border: 1px solid var(--border);
+}
+
+.override-clear-btn:hover:not(:disabled) {
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.override-activate-btn:disabled,
+.override-clear-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* ===================================================================
+   Upload Grid
+   =================================================================== */
+
+.upload-grid, .lane-results, .simulation-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.upload-grid[data-count="4"],
+.lane-results:not(.empty),
+.simulation-grid[data-count="4"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.upload-grid[data-count="3"],
+.simulation-grid[data-count="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.upload-card { display: block; cursor: pointer; }
+.upload-card.hidden { display: none; }
+.video-input { display: none; }
+
+.upload-preview, .lane-card, .sim-card, .history-card {
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.upload-preview {
+  position: relative;
+  overflow: hidden;
+  min-height: 240px;
+}
+
+.preview-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background: #02070d;
+}
+
+.upload-card.has-preview .preview-video { opacity: 0.96; }
+
+.preview-copy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem;
+  background:
+    linear-gradient(180deg, rgba(10, 17, 24, 0.08), rgba(10, 17, 24, 0.88)),
+    linear-gradient(135deg, rgba(93, 213, 255, 0.10), rgba(255, 184, 77, 0.10));
+}
+
+.lane-number, .chip {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 184, 77, 0.16);
+  color: var(--accent);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.preview-copy strong { margin-top: auto; font-size: 1.1rem; }
+
+.file-name {
+  color: var(--muted);
+  margin-top: 0.35rem;
+  font-size: 0.92rem;
+}
+
+
+/* ===================================================================
+   Form & Control Buttons (START / STOP)
+   =================================================================== */
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.status-text { margin: 0; line-height: 1.6; }
+
+.control-buttons {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.start-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #34d399, #10b981);
+  color: #052e16;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 18px rgba(52, 211, 153, 0.3);
+}
+
+.start-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(52, 211, 153, 0.5);
+}
+
+.start-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.stop-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff4d5e, #d92638);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(255, 77, 94, 0.3);
+  box-shadow: 0 4px 20px rgba(255, 77, 94, 0.25);
+}
+
+.stop-button:not(:disabled):hover {
+  box-shadow: 0 6px 28px rgba(255, 77, 94, 0.45);
+}
+
+.stop-button:not(:disabled) {
+  animation: stop-pulse 2s ease-in-out infinite;
+}
+
+.stop-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  animation: none;
+}
+
+.stop-icon { font-size: 0.8rem; line-height: 1; }
+
+@keyframes stop-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(255, 77, 94, 0.25); }
+  50% { box-shadow: 0 4px 32px rgba(255, 77, 94, 0.55); }
+}
+
+
+/* ===================================================================
+   Simulation Badge
+   =================================================================== */
+
+.sim-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sim-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.sim-badge.idle {
+  background: rgba(148, 168, 186, 0.12);
+  color: var(--muted);
+}
+
+.sim-badge.running {
+  background: rgba(90, 224, 142, 0.15);
+  color: var(--green);
+  animation: badge-glow 1.5s ease-in-out infinite;
+}
+
+.sim-badge.running::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: badge-dot 1.5s ease-in-out infinite;
+}
+
+.sim-badge.stopped {
+  background: rgba(255, 104, 125, 0.15);
+  color: var(--red);
+}
+
+@keyframes badge-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes badge-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
+}
+
+
+/* ===================================================================
+   Top Metrics
+   =================================================================== */
+
+.top-metrics {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.metric {
+  min-width: 130px;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+}
+
+.metric span { display: block; color: var(--muted); font-size: 0.82rem; }
+.metric strong { display: block; margin-top: 0.45rem; font-size: 1.08rem; }
+
+.empty-card { padding: 1.2rem; }
+.empty-card h3 { margin: 0 0 0.4rem; }
+
+
+/* ===================================================================
+   Lane / Sim / History Cards
+   =================================================================== */
+
+.lane-card, .sim-card, .history-card { padding: 0.95rem; }
+
+.lane-card.priority { border-color: rgba(255, 184, 77, 0.45); }
+.lane-card.emergency { border-color: rgba(255, 104, 125, 0.45); }
+.lane-card.override { border-color: rgba(180, 122, 255, 0.55); box-shadow: 0 0 20px rgba(180, 122, 255, 0.1); }
+
+.lane-head, .sim-head, .history-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.lane-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 18px;
+  margin: 0.85rem 0;
+}
+
+.meta { display: grid; gap: 0.52rem; }
+
+.meta div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.sim-card video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #02070d;
+  margin-top: 0.8rem;
+}
+
+.signal-area {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 0.9rem;
+  align-items: center;
+}
+
+.light-stack {
+  display: grid;
+  gap: 0.8rem;
+  justify-items: center;
+  background: #030b14;
+  border-radius: 999px;
+  padding: 0.9rem 0.6rem;
+  border: 1px solid var(--border);
+}
+
+.light {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #203141;
+  opacity: 0.22;
+}
+
+.timer { display: grid; gap: 0.4rem; }
+.timer-value { font-size: 2rem; font-weight: 700; }
+.timer-note { color: var(--muted); }
+
+.sim-card.state-red .red {
+  background: var(--red);
+  opacity: 1;
+  box-shadow: 0 0 18px rgba(255, 104, 125, 0.65);
+}
+
+.sim-card.state-yellow .yellow {
+  background: var(--yellow);
+  opacity: 1;
+  box-shadow: 0 0 18px rgba(255, 216, 77, 0.65);
+}
+
+.sim-card.state-green .green {
+  background: var(--green);
+  opacity: 1;
+  box-shadow: 0 0 18px rgba(90, 224, 142, 0.65);
+}
+
+.sim-card.state-override .green {
+  background: var(--purple);
+  opacity: 1;
+  box-shadow: 0 0 24px rgba(180, 122, 255, 0.7);
+}
+
+
+/* ===================================================================
+   Pedestrian Crossing Card
+   =================================================================== */
+
+.ped-card {
+  grid-column: 1 / -1;
+  border-radius: 22px;
+  border: 1px solid rgba(93, 165, 255, 0.3);
+  background: linear-gradient(135deg, rgba(93, 165, 255, 0.08), rgba(90, 224, 142, 0.05));
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.ped-card .ped-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  animation: ped-walk 1s ease-in-out infinite alternate;
+}
+
+.ped-card h3 { margin: 0 0 0.3rem; color: var(--blue); }
+.ped-card p { margin: 0; color: var(--muted); }
+
+.ped-card .ped-timer {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin-top: 0.5rem;
+}
+
+.ped-card.active {
+  border-color: rgba(93, 165, 255, 0.6);
+  box-shadow: 0 0 30px rgba(93, 165, 255, 0.15);
+}
+
+@keyframes ped-walk {
+  0% { transform: translateX(-8px); }
+  100% { transform: translateX(8px); }
+}
+
+
+/* ===================================================================
+   History
+   =================================================================== */
+
+.history-list { display: grid; gap: 0.85rem; margin-top: 1rem; }
+.history-head h3, .history-card p { margin: 0; }
+
+
+/* ===================================================================
+   Responsive
+   =================================================================== */
+
+@media (max-width: 1060px) {
+  .upload-grid[data-count="3"],
+  .simulation-grid[data-count="3"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .panel-head, .form-row { flex-direction: column; align-items: stretch; }
+  .override-row { flex-direction: column; align-items: stretch; }
+  .override-label { min-width: auto; }
+}
+
+@media (max-width: 760px) {
+  .page {
+    width: min(100% - 1rem, 1240px);
+    padding-top: 1rem;
+  }
+
+  .upload-grid[data-count="3"],
+  .upload-grid[data-count="4"],
+  .lane-results:not(.empty),
+  .simulation-grid[data-count="3"],
+  .simulation-grid[data-count="4"] {
+    grid-template-columns: 1fr;
+  }
+
+  .signal-area { grid-template-columns: 1fr; }
+
+  .light-stack {
+    grid-auto-flow: column;
+    grid-template-columns: repeat(3, 1fr);
+    border-radius: 18px;
+  }
+
+  .sim-controls, .control-buttons, .override-actions { flex-wrap: wrap; }
+}
