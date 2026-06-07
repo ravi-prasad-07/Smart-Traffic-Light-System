@@ -13,6 +13,8 @@ A web-based intelligent traffic management system built using YOLO for real-time
 * 🚶 Pedestrian detection with safe crossing signals
 * 🌐 Web-based traffic monitoring dashboard
 * 📹 Video feed processing using AI-based object detection
+* 🗄 Traffic data storage using SQLite
+* 🖼 Processed image data saved in separate folders for analysis and records
 
 ---
 
@@ -21,6 +23,7 @@ A web-based intelligent traffic management system built using YOLO for real-time
 * Python
 * YOLO (Object Detection)
 * OpenCV
+* SQLite
 * Flask / Django
 * HTML, CSS, JavaScript
 
@@ -34,6 +37,8 @@ A web-based intelligent traffic management system built using YOLO for real-time
 4. Signal timings are adjusted dynamically.
 5. Emergency vehicles receive instant signal priority.
 6. Pedestrian crossings are managed automatically for safety.
+7. Traffic data is stored in an SQLite database.
+8. Processed images and detection outputs are saved in separate folders for future analysis.
 
 ---
 
