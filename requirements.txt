@@ -5,3 +5,4 @@ ultralytics>=8.4
 scipy>=1.12
 lap>=0.4
 nvidia-ml-py>=12.560
+yolov8m.pt//download it and add it to the main branch
