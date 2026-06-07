@@ -1,0 +1,4 @@
+download the yolov8m.pt model form this link:
+https://github.com/ultralytics/assets/releases/download/v8.4.0/yolov8m.pt
+
+after downloading it add this file where this file is present(This file is present in the top of the main branch)
